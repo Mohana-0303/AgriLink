@@ -1,0 +1,41 @@
+{
+  "info": { "name": "AgriLink API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [{ "key": "baseUrl", "value": "http://localhost:5000/api" }, { "key": "token", "value": "" }, { "key": "productId", "value": "" }, { "key": "orderId", "value": "" }, { "key": "userId", "value": "" }],
+  "item": [
+    { "name": "Auth", "item": [
+      { "name": "Register", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "{{baseUrl}}/auth/register", "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test Farmer\",\n  \"email\": \"testfarmer@agrilink.com\",\n  \"phone\": \"9000011111\",\n  \"password\": \"Test@123\",\n  \"role\": \"farmer\",\n  \"address\": \"Chennai\"\n}" } } },
+      { "name": "Login", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "{{baseUrl}}/auth/login", "body": { "mode": "raw", "raw": "{\n  \"email\": \"ravi@agrilink.com\",\n  \"password\": \"Farmer@123\"\n}" } } },
+      { "name": "Get Profile", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/auth/profile" } }
+    ]},
+    { "name": "Products", "item": [
+      { "name": "List Products", "request": { "method": "GET", "url": "{{baseUrl}}/products?search=tomato&category=Vegetables&sort=price_asc" } },
+      { "name": "Get Product By Id", "request": { "method": "GET", "url": "{{baseUrl}}/products/{{productId}}" } },
+      { "name": "My Products (farmer)", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/products/mine" } },
+      { "name": "Create Product (farmer, form-data)", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/products", "body": { "mode": "formdata", "formdata": [
+        {"key":"name","value":"Tomato"}, {"key":"category","value":"Vegetables"}, {"key":"description","value":"Fresh tomatoes"},
+        {"key":"price","value":"20"}, {"key":"quantity","value":"100"}, {"key":"unit","value":"kg"}, {"key":"location","value":"Salem"},
+        {"key":"image","type":"file","src":""}
+      ] } } },
+      { "name": "Update Product (farmer)", "request": { "method": "PUT", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/products/{{productId}}", "body": { "mode": "formdata", "formdata": [ {"key":"price","value":"22"} ] } } },
+      { "name": "Delete Product (farmer)", "request": { "method": "DELETE", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/products/{{productId}}" } }
+    ]},
+    { "name": "Orders", "item": [
+      { "name": "Create Order (buyer)", "request": { "method": "POST", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{baseUrl}}/orders", "body": { "mode": "raw", "raw": "{\n  \"items\": [ { \"productId\": \"{{productId}}\", \"quantity\": 2 } ],\n  \"deliveryAddress\": \"12 Market Road, Chennai\"\n}" } } },
+      { "name": "Get My Orders", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/orders" } },
+      { "name": "Get Order By Id", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/orders/{{orderId}}" } },
+      { "name": "Update Order Status", "request": { "method": "PUT", "header": [{"key":"Authorization","value":"Bearer {{token}}"},{"key":"Content-Type","value":"application/json"}], "url": "{{baseUrl}}/orders/{{orderId}}/status", "body": { "mode": "raw", "raw": "{\n  \"status\": \"confirmed\"\n}" } } }
+    ]},
+    { "name": "Analytics", "item": [
+      { "name": "Farmer Analytics", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/analytics/farmer" } },
+      { "name": "Admin Analytics", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/admin/analytics" } }
+    ]},
+    { "name": "Admin", "item": [
+      { "name": "List Users", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/admin/users" } },
+      { "name": "Verify Farmer", "request": { "method": "PUT", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/admin/users/{{userId}}/verify" } },
+      { "name": "Toggle User Active", "request": { "method": "PUT", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/admin/users/{{userId}}/active" } },
+      { "name": "List All Products", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/admin/products" } },
+      { "name": "Verify Product", "request": { "method": "PUT", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/admin/products/{{productId}}/verify" } },
+      { "name": "List All Orders", "request": { "method": "GET", "header": [{"key":"Authorization","value":"Bearer {{token}}"}], "url": "{{baseUrl}}/admin/orders" } }
+    ]}
+  ]
+}
